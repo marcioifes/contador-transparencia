@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<meta property="og:title" content="Contador da Transparência">
+<meta property="og:description" content="Acompanhe a contagem de dias desde 18 de outubro de 2026.">
+<title>Contador da Transparência</title>
+<style>
+  :root { color-scheme: dark; --bg:#101010; --panel:#191919; --yellow:#ffd928; --red:#e5262f; --white:#f7f7f7; --muted:#c7c7c7; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% 0%, #333 0, var(--bg) 55%); color:var(--white); font-family:Arial,Helvetica,sans-serif; display:flex; align-items:center; justify-content:center; padding:24px 16px; }
+  main { width:min(100%, 680px); text-align:center; }
+  .eyebrow { display:inline-block; background:var(--yellow); color:#111; font-weight:900; letter-spacing:.12em; padding:9px 14px; transform:rotate(-1deg); }
+  h1 { text-transform:uppercase; font-size:clamp(1.7rem, 6vw, 3.1rem); line-height:1.04; margin:24px 0 10px; font-weight:950; }
+  .counter { font-size:clamp(5rem, 24vw, 11rem); font-weight:1000; line-height:.95; letter-spacing:-.07em; color:var(--red); text-shadow:4px 4px 0 #5d090d; margin:18px 0 8px; font-variant-numeric:tabular-nums; }
+  .days { font-size:clamp(1.5rem, 6vw, 2.5rem); font-weight:950; letter-spacing:.12em; color:var(--yellow); text-transform:uppercase; }
+  .message { margin:26px auto 0; padding:22px 18px; border:2px solid #555; border-left:8px solid var(--yellow); background:var(--panel); text-align:left; font-size:clamp(1.1rem, 4vw, 1.55rem); line-height:1.35; font-weight:800; }
+  .message strong { color:var(--yellow); }
+  .question { font-size:clamp(1.3rem, 5vw, 2rem); font-weight:950; text-transform:uppercase; margin:25px 0 8px; }
+  .sub { color:var(--muted); line-height:1.5; font-size:.95rem; }
+  .actions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:24px 0 18px; }
+  button, .share { cursor:pointer; border:0; border-radius:8px; padding:13px 17px; font-size:1rem; font-weight:800; text-decoration:none; }
+  button { background:var(--yellow); color:#111; }
+  .share { background:#292929; color:white; border:1px solid #555; }
+  footer { color:#999; font-size:.78rem; margin-top:24px; line-height:1.5; }
+  @media (prefers-reduced-motion: no-preference) { .counter { animation:pop .7s ease-out both; } @keyframes pop { from { transform:scale(.92); opacity:.3 } to { transform:scale(1); opacity:1 } } }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">CONTADOR DA TRANSPARÊNCIA</div>
+  <h1>Estamos há</h1>
+  <div class="counter" id="days" aria-live="polite">02</div>
+  <div class="days">dias esperando</div>
+  <div class="message">pela abertura do sigilo de <strong>Flávio Bolsonaro</strong>.</div>
+  <div class="question">Lula fez o desafio. E agora?</div>
+  <p class="sub">A transparência precisa valer para todos.</p>
+  <div class="actions">
+    <button onclick="sharePage()">Compartilhar contador</button>
+    <a class="share" href="https://www.instagram.com/" target="_blank" rel="noopener">Abrir Instagram</a>
+  </div>
+  <p class="sub" id="updated">Contagem calculada automaticamente desde 18/10/2026.</p>
+  <footer>Contagem baseada na data inicial indicada. Esta página apresenta uma cobrança/opinião política e não constitui, por si só, comprovação de obrigação legal descumprida.</footer>
+</main>
+<script>
+  // Data inicial: 18 de outubro de 2026, às 00h (horário de Brasília, UTC-3).
+  const start = new Date('2026-10-18T00:00:00-03:00');
+  function updateCounter() {
+    const now = new Date();
+    const elapsed = Math.max(0, now.getTime() - start.getTime());
+    const days = Math.floor(elapsed / 86400000);
+    document.getElementById('days').textContent = String(days).padStart(2, '0');
+    document.getElementById('updated').textContent =
+      'Contagem atualizada automaticamente. Início: 18/10/2026 às 00h (horário de Brasília).';
+  }
+  async function sharePage() {
+    const data = { title: document.title, text: 'Estamos há ' + document.getElementById('days').textContent + ' dias esperando pela abertura do sigilo de Flávio Bolsonaro. A transparência precisa valer para todos.', url: location.href };
+    if (navigator.share) {
+      try { await navigator.share(data); } catch (e) {}
+    } else if (navigator.clipboard) {
+      try { await navigator.clipboard.writeText(data.text + '\n' + data.url); alert('Texto copiado. Cole no WhatsApp ou Instagram.'); } catch (e) { alert(data.text); }
+    } else {
+      alert(data.text + '\n' + data.url);
+    }
+  }
+  updateCounter();
+  setInterval(updateCounter, 60000);
+</script>
+</body>
+</html>
